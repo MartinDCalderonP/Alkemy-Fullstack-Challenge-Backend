@@ -17,8 +17,17 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
 	let sqlPostMove = `
-        INSERT INTO Moves (move_description, move_amount, move_type, move_date)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO Moves (
+			move_description,
+			move_amount,
+			move_type,
+			move_date
+		) VALUES (
+			?,
+			?,
+			?,
+			?
+		)
     `;
 
 	let valuesPostMove = [
@@ -28,7 +37,7 @@ router.post('/', (req, res) => {
 		req.body.date,
 	];
 
-	connection.query(sqlPostMove, valuesPostMove, (err, result) => {
+	connection.query(sqlPostMove, valuesPostMove, (err, result, fields) => {
 		if (err) {
 			res.json({
 				status: 'Error.',
