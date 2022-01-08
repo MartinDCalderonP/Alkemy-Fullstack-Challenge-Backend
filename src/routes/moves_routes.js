@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
         FROM Moves
     `;
 
-	connection.query(sqlMoves, (err, result) => {
+	connection.query(sqlMoves, (err, result, fields) => {
 		if (err) throw err;
 
 		res.json(result);
@@ -40,13 +40,36 @@ router.post('/', (req, res) => {
 	connection.query(sqlPostMove, valuesPostMove, (err, result, fields) => {
 		if (err) {
 			res.json({
-				status: 'Error.',
+				status: 'Error',
 				message: 'Error when trying to create a new move. Please try again.',
 			});
 		} else {
 			res.json({
 				status: 'Success',
 				message: 'Move created successfully.',
+			});
+		}
+	});
+});
+
+router.delete('/:id', (req, res) => {
+	let sqlDeleteMove = `
+        DELETE FROM Moves
+        WHERE move_id = ?
+    `;
+
+	let valuesDeleteMove = [req.params.id];
+
+	connection.query(sqlDeleteMove, valuesDeleteMove, (err, result, fields) => {
+		if (err) {
+			res.json({
+				status: 'Error',
+				message: 'Error when trying to delete a move. Please try again.',
+			});
+		} else {
+			res.json({
+				status: 'Success',
+				message: 'Move deleted successfully.',
 			});
 		}
 	});
