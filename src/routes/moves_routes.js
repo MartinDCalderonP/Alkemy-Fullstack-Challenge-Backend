@@ -15,6 +15,22 @@ router.get('/', (req, res) => {
 	});
 });
 
+router.get('/:id', (req, res) => {
+	let sqlMoveById = `
+		SELECT *
+		FROM Moves
+		WHERE move_id = ?
+	`;
+
+	let valuesMoveById = [req.params.id];
+
+	connection.query(sqlMoveById, valuesMoveById, (err, result, fields) => {
+		if (err) throw err;
+
+		res.json(result);
+	});
+});
+
 router.post('/', (req, res) => {
 	let sqlPostMove = `
         INSERT INTO Moves (
