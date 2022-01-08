@@ -52,6 +52,37 @@ router.post('/', (req, res) => {
 	});
 });
 
+router.put('/:id', (req, res) => {
+	let sqlUpdateMove = `
+		UPDATE Moves
+		SET move_description = ?,
+			move_amount = ?,
+			move_date = ?
+		WHERE move_id = ?
+	`;
+
+	let valuesUpdateMove = [
+		req.body.description,
+		req.body.amount,
+		req.body.date,
+		req.params.id,
+	];
+
+	connection.query(sqlUpdateMove, valuesUpdateMove, (err, result, fields) => {
+		if (err) {
+			res.json({
+				status: 'Error',
+				message: 'Error when trying to update a move. Please try again.',
+			});
+		} else {
+			res.json({
+				status: 'Success',
+				message: 'Move updated successfully.',
+			});
+		}
+	});
+});
+
 router.delete('/:id', (req, res) => {
 	let sqlDeleteMove = `
         DELETE FROM Moves
