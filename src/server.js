@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
-
+const session = require('express-session');
 const auth = require('./auth');
 const movesRoutes = require('./routes/moves_routes');
 
@@ -18,6 +18,16 @@ app.use(
 		credentials: true,
 		origin: 'http://localhost:3000',
 		allowedHeaders: ['Access-Control-Allow-Origin', 'Content-Type'],
+	})
+);
+
+app.use(
+	session({
+		store: new FileStore({ logFn: function () {} }),
+		secret: '123456789',
+		resave: false,
+		saveUninitialized: true,
+		name: 'Alkemy Fullstack Challenge',
 	})
 );
 
