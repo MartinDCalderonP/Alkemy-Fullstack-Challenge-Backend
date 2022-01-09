@@ -3,7 +3,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const session = require('express-session');
+const FileStore = require('session-file-store')(session);
 const auth = require('./auth');
+const sessionRoutes = require('./routes/session_routes');
 const movesRoutes = require('./routes/moves_routes');
 
 const app = express();
