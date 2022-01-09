@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 
+const auth = require('./auth');
 const movesRoutes = require('./routes/moves_routes');
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(
 	})
 );
 
+app.use('/auth', sessionRoutes);
 app.use('/moves', movesRoutes);
 
 app.listen(process.env.PORT, () => {
