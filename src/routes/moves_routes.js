@@ -3,7 +3,7 @@ const router = express.Router();
 const connection = require('../connection');
 
 router.get('/', (req, res) => {
-	let sqlMoves = `
+	const sqlMoves = `
         SELECT *
         FROM Moves
     `;
@@ -16,13 +16,13 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-	let sqlMoveById = `
+	const sqlMoveById = `
 		SELECT *
 		FROM Moves
 		WHERE move_id = ?
 	`;
 
-	let valuesMoveById = [req.params.id];
+	const valuesMoveById = [req.params.id];
 
 	connection.query(sqlMoveById, valuesMoveById, (err, result, fields) => {
 		if (err) throw err;
@@ -32,7 +32,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-	let sqlPostMove = `
+	const sqlPostMove = `
         INSERT INTO Moves (
 			move_description,
 			move_amount,
@@ -46,7 +46,7 @@ router.post('/', (req, res) => {
 		)
     `;
 
-	let valuesPostMove = [
+	const valuesPostMove = [
 		req.body.description,
 		req.body.amount,
 		req.body.type,
@@ -69,7 +69,7 @@ router.post('/', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-	let sqlUpdateMove = `
+	const sqlUpdateMove = `
 		UPDATE Moves
 		SET move_description = ?,
 			move_amount = ?,
@@ -77,7 +77,7 @@ router.put('/:id', (req, res) => {
 		WHERE move_id = ?
 	`;
 
-	let valuesUpdateMove = [
+	const valuesUpdateMove = [
 		req.body.description,
 		req.body.amount,
 		req.body.date,
@@ -100,12 +100,12 @@ router.put('/:id', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
-	let sqlDeleteMove = `
+	const sqlDeleteMove = `
         DELETE FROM Moves
         WHERE move_id = ?
     `;
 
-	let valuesDeleteMove = [req.params.id];
+	const valuesDeleteMove = [req.params.id];
 
 	connection.query(sqlDeleteMove, valuesDeleteMove, (err, result, fields) => {
 		if (err) {
