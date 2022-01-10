@@ -10,7 +10,7 @@ router.post('/users', (req, res) => {
         AND user_password = ?
     `;
 
-	let valuesUser = [req.body.user, req.body.password];
+	let valuesUser = [req.body.email, req.body.password];
 
 	connection.query(sqlUser, valuesUser, (err, result, fields) => {
 		if (err) {
@@ -19,7 +19,11 @@ router.post('/users', (req, res) => {
 			});
 		} else {
 			if (result.length > 0) {
-				res.send(result);
+				req.session.user = result[0];
+				res.status(200).send({
+					message: 'User logged in',
+					user: result[0],
+				});
 			} else {
 				res.status(404).send({
 					message: 'User or password incorrect',
