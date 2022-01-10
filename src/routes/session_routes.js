@@ -21,7 +21,6 @@ router.post('/users', (req, res) => {
 			if (result.length > 0) {
 				req.session.user = result[0];
 				res.status(200).send({
-					message: 'User logged in',
 					user: result[0],
 				});
 			} else {
