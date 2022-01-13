@@ -14,18 +14,23 @@ router.post('/users', (req, res) => {
 
 	connection.query(sqlUser, valuesUser, (err, result, fields) => {
 		if (err) {
-			res.status(500).send({
-				message: 'Error in the request to the database',
+			res.json({
+				status: 'Error',
+				message: 'Error when trying to login. Please try again.',
 			});
 		} else {
 			if (result.length > 0) {
 				req.session.user = result[0];
-				res.status(200).send({
+
+				res.json({
+					status: 'Success',
+					message: 'Login successful.',
 					user: result[0],
 				});
 			} else {
-				res.status(404).send({
-					message: 'User or password incorrect',
+				res.json({
+					status: 'Error',
+					message: 'Invalid email or password.',
 				});
 			}
 		}
