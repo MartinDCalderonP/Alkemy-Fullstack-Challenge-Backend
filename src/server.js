@@ -6,6 +6,7 @@ const session = require('express-session');
 const FileStore = require('session-file-store')(session);
 const auth = require('./auth');
 const sessionRoutes = require('./routes/session_routes');
+const registerRoutes = require('./routes/register_routes');
 const movesRoutes = require('./routes/moves_routes');
 
 const app = express();
@@ -34,6 +35,7 @@ app.use(
 );
 
 app.use('/auth', sessionRoutes);
+app.use('/register', registerRoutes);
 app.use('/moves', movesRoutes);
 
 app.listen(process.env.PORT, () => {
