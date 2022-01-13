@@ -19,12 +19,12 @@ router.post('/users', (req, res) => {
 		if (err) {
 			res.json({
 				status: 'Error',
-				message: 'Error when trying to register a new user. Please try again.',
+				message: 'Error when trying to sign up a new user. Please try again.',
 			});
 		} else {
 			res.json({
 				status: 'Success',
-				message: 'User registered successfully.',
+				message: 'User signed up successfully.',
 			});
 		}
 	});

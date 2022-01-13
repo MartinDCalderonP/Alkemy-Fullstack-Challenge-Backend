@@ -16,7 +16,7 @@ router.post('/users', (req, res) => {
 		if (err) {
 			res.json({
 				status: 'Error',
-				message: 'Error when trying to login. Please try again.',
+				message: 'Error when trying to sign in. Please try again.',
 			});
 		} else {
 			if (result.length > 0) {
@@ -24,7 +24,7 @@ router.post('/users', (req, res) => {
 
 				res.json({
 					status: 'Success',
-					message: 'Login successful.',
+					message: 'Sign in successful.',
 					user: result[0],
 				});
 			} else {
@@ -42,13 +42,13 @@ router.delete('/', (req, res) => {
 		if (err) {
 			res.json({
 				status: 'Error',
-				message: 'Error trying to log out. Try again later.',
+				message: 'Error trying to sign out. Try again later.',
 			});
 		} else {
 			res.clearCookie('Alkemy Fullstack Challenge');
 			res.json({
 				status: 'Success',
-				message: 'Logged out successfully.',
+				message: 'User signed out successfully.',
 			});
 		}
 	});
