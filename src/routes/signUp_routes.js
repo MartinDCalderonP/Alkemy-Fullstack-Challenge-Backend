@@ -16,7 +16,8 @@ router.post('/users', (req, res) => {
 		if (err) {
 			res.json({
 				status: 'Error',
-				message: 'Error when trying to sign in. Please try again.',
+				message:
+					'Error when trying to check if user already exists. Please try again.',
 			});
 		} else {
 			if (result.length > 0) {
