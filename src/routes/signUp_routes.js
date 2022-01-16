@@ -3,29 +3,59 @@ const router = express.Router();
 const connection = require('../connection');
 
 router.post('/users', (req, res) => {
-	let sqlInsertUser = `
-        INSERT INTO Users (
-            user_email,
-            user_password
-        ) VALUES (
-            ?,
-            ?
-        )
-    `;
+	let sqlSelectUser = `
+		SELECT *
+		FROM users
+		WHERE user_email = ?
+		AND user_password = ?
+	`;
 
-	let valuesInsertUser = [req.body.email, req.body.password];
+	let valuesSelectUser = [req.body.email, req.body.password];
 
-	connection.query(sqlInsertUser, valuesInsertUser, (err, result, fields) => {
+	connection.query(sqlSelectUser, valuesSelectUser, (err, result, fields) => {
 		if (err) {
 			res.json({
 				status: 'Error',
-				message: 'Error when trying to sign up a new user. Please try again.',
+				message: 'Error when trying to sign in. Please try again.',
 			});
 		} else {
-			res.json({
-				status: 'Success',
-				message: 'User signed up successfully.',
-			});
+			if (result.length > 0) {
+				res.json({
+					status: 'Error',
+					message: 'User already exists.',
+				});
+			} else {
+				let sqlInsertUser = `
+					INSERT INTO Users (
+						user_email,
+						user_password
+					) VALUES (
+						?,
+						?
+					)
+				`;
+
+				let valuesInsertUser = [req.body.email, req.body.password];
+
+				connection.query(
+					sqlInsertUser,
+					valuesInsertUser,
+					(err, result, fields) => {
+						if (err) {
+							res.json({
+								status: 'Error',
+								message:
+									'Error when trying to sign up a new user. Please try again.',
+							});
+						} else {
+							res.json({
+								status: 'Success',
+								message: 'User signed up successfully.',
+							});
+						}
+					}
+				);
+			}
 		}
 	});
 });
