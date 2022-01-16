@@ -35,7 +35,7 @@ app.use(
 );
 
 app.use('/auth', signInRoutes);
-app.use('/signUp', signUpRoutes);
+app.use('/sign-up', signUpRoutes);
 app.use('/moves', movesRoutes);
 
 app.listen(process.env.PORT, () => {
