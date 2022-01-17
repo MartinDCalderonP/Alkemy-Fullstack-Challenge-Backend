@@ -49,11 +49,6 @@ router.post('/users', (req, res) => {
 									'Error when trying to sign up a new user. Please try again.',
 							});
 						} else {
-							res.json({
-								status: 'Success',
-								message: 'User signed up successfully.',
-							});
-
 							const sqlSignInUser = `
 								SELECT *
 								FROM users
@@ -61,10 +56,7 @@ router.post('/users', (req, res) => {
 								AND user_password = ?
 							`;
 
-							const valuesSignInUser = [
-								req.body.email,
-								req.body.password,
-							];
+							const valuesSignInUser = [req.body.email, req.body.password];
 
 							connection.query(
 								sqlSignInUser,
@@ -74,7 +66,7 @@ router.post('/users', (req, res) => {
 										res.json({
 											status: 'Error',
 											message:
-												'Error when trying to sign in. Please try again.',
+												'Error when trying to sign in after sign up a new user. Please try again.',
 										});
 									} else {
 										if (result.length > 0) {
@@ -82,13 +74,14 @@ router.post('/users', (req, res) => {
 
 											res.json({
 												status: 'Success',
-												message: 'Sign in successful.',
+												message: 'User signed up successfully.',
 												user: result[0],
 											});
 										} else {
 											res.json({
 												status: 'Error',
-												message: 'Invalid email or password.',
+												message:
+													'Error when trying to sign in after sign up a new user. Please try again.',
 											});
 										}
 									}
