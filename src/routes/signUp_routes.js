@@ -28,15 +28,23 @@ router.post('/users', (req, res) => {
 			} else {
 				const sqlSignUpUser = `
 					INSERT INTO Users (
+						user_name,
 						user_email,
 						user_password
 					) VALUES (
+						?,
 						?,
 						?
 					)
 				`;
 
-				const valuesSingUpUser = [req.body.email, req.body.password];
+				const valuesSingUpUser = [
+					req.body.name,
+					req.body.email,
+					req.body.password,
+				];
+
+				console.log(valuesSingUpUser);
 
 				connection.query(
 					sqlSignUpUser,
