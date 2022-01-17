@@ -2,20 +2,31 @@ const express = require('express');
 const router = express.Router();
 const connection = require('../connection');
 
-router.get('/', (req, res) => {
-	const sqlGetMoves = `
-        SELECT *
-        FROM Moves
+router.get('/by-user-id/:userId', (req, res) => {
+	const sqlGetMovesByUserId = `
+		SELECT *
+		FROM Moves
+		LEFT JOIN moves_users
+		ON moves.move_id=moves_users.mous_move_id
+		RIGHT JOIN users
+		ON moves_users.mous_user_id=users.user_id
+		WHERE users.user_id = ?;
     `;
 
-	connection.query(sqlGetMoves, (err, result, fields) => {
-		if (err) throw err;
+	const valuesGetMovesByUserId = [req.params.userId];
 
-		res.json(result);
-	});
+	connection.query(
+		sqlGetMovesByUserId,
+		valuesGetMovesByUserId,
+		(err, result, fields) => {
+			if (err) throw err;
+
+			res.json(result);
+		}
+	);
 });
 
-router.get('/:id', (req, res) => {
+router.get('/by-move-id/:moveId', (req, res) => {
 	const sqlGetMoveById = `
 		SELECT *
 		FROM Moves
