@@ -33,7 +33,7 @@ router.get('/by-move-id/:moveId', (req, res) => {
 		WHERE move_id = ?
 	`;
 
-	const valuesGetMoveById = [req.params.id];
+	const valuesGetMoveById = [req.params.moveId];
 
 	connection.query(sqlGetMoveById, valuesGetMoveById, (err, result, fields) => {
 		if (err) throw err;
