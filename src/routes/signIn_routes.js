@@ -3,14 +3,14 @@ const router = express.Router();
 const connection = require('../connection');
 
 router.post('/users', (req, res) => {
-	let sqlSignInUser = `
+	const sqlSignInUser = `
         SELECT *
         FROM users
         WHERE user_email = ?
         AND user_password = ?
     `;
 
-	let valuesSignInUser = [req.body.email, req.body.password];
+	const valuesSignInUser = [req.body.email, req.body.password];
 
 	connection.query(sqlSignInUser, valuesSignInUser, (err, result, fields) => {
 		if (err) {
