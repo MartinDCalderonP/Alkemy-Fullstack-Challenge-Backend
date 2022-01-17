@@ -44,8 +44,6 @@ router.post('/users', (req, res) => {
 					req.body.password,
 				];
 
-				console.log(valuesSingUpUser);
-
 				connection.query(
 					sqlSignUpUser,
 					valuesSingUpUser,
