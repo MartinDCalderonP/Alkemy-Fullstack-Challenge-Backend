@@ -3,12 +3,12 @@ const router = express.Router();
 const connection = require('../connection');
 
 router.get('/', (req, res) => {
-	const sqlMoves = `
+	const sqlGetMoves = `
         SELECT *
         FROM Moves
     `;
 
-	connection.query(sqlMoves, (err, result, fields) => {
+	connection.query(sqlGetMoves, (err, result, fields) => {
 		if (err) throw err;
 
 		res.json(result);
@@ -16,15 +16,15 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-	const sqlMoveById = `
+	const sqlGetMoveById = `
 		SELECT *
 		FROM Moves
 		WHERE move_id = ?
 	`;
 
-	const valuesMoveById = [req.params.id];
+	const valuesGetMoveById = [req.params.id];
 
-	connection.query(sqlMoveById, valuesMoveById, (err, result, fields) => {
+	connection.query(sqlGetMoveById, valuesGetMoveById, (err, result, fields) => {
 		if (err) throw err;
 
 		res.json(result);
