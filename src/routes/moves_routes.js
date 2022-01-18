@@ -76,10 +76,36 @@ router.post('/', (req, res) => {
 				message: 'Error when trying to create a new move. Please try again.',
 			});
 		} else {
-			res.json({
-				status: 'Success',
-				message: 'Move created successfully.',
-			});
+			const sqlPostMoveUser = `
+				INSERT INTO moves_users (
+					mous_move_id,
+					mous_user_id
+				) VALUES (
+					?,
+					?
+				)
+			`;
+
+			const valuesPostMoveUser = [result.insertId, req.body.userId];
+
+			connection.query(
+				sqlPostMoveUser,
+				valuesPostMoveUser,
+				(err, result, fields) => {
+					if (err) {
+						res.json({
+							status: 'Error',
+							message:
+								'Error when trying to create a new move. Please try again.',
+						});
+					} else {
+						res.json({
+							status: 'Success',
+							message: 'Move created successfully.',
+						});
+					}
+				}
+			);
 		}
 	});
 });
