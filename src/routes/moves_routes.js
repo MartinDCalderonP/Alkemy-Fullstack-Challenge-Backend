@@ -26,14 +26,19 @@ router.get('/by-user-id/:userId', (req, res) => {
 	);
 });
 
-router.get('/by-move-id/:moveId', (req, res) => {
+router.get('/by-move-id/:userId/:moveId', (req, res) => {
 	const sqlGetMoveById = `
 		SELECT *
 		FROM Moves
-		WHERE move_id = ?
+		LEFT JOIN moves_users
+		ON moves.move_id=moves_users.mous_move_id
+		RIGHT JOIN users
+		ON moves_users.mous_user_id=users.user_id
+		WHERE users.user_id = ?
+		AND moves.move_id = ?;
 	`;
 
-	const valuesGetMoveById = [req.params.moveId];
+	const valuesGetMoveById = [req.params.userId, req.params.moveId];
 
 	connection.query(sqlGetMoveById, valuesGetMoveById, (err, result, fields) => {
 		if (err) throw err;
