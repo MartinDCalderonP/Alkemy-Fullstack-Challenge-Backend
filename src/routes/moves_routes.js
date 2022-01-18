@@ -110,7 +110,7 @@ router.post('/', (req, res) => {
 	});
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:moveId', (req, res) => {
 	const sqlUpdateMove = `
 		UPDATE Moves
 		SET move_description = ?,
@@ -123,7 +123,7 @@ router.put('/:id', (req, res) => {
 		req.body.description,
 		req.body.amount,
 		req.body.date,
-		req.params.id,
+		req.params.moveId,
 	];
 
 	connection.query(sqlUpdateMove, valuesUpdateMove, (err, result, fields) => {
@@ -141,27 +141,53 @@ router.put('/:id', (req, res) => {
 	});
 });
 
-router.delete('/:id', (req, res) => {
-	const sqlDeleteMove = `
-        DELETE FROM Moves
-        WHERE move_id = ?
-    `;
+router.delete('/:moveId', (req, res) => {
+	const sqlDeleteMoveUser = `
+				DELETE FROM moves_users
+				WHERE mous_move_id = ?
+				AND mous_user_id = ?
+			`;
 
-	const valuesDeleteMove = [req.params.id];
+	const valuesDeleteMoveUser = [req.params.moveId, req.body.userId];
 
-	connection.query(sqlDeleteMove, valuesDeleteMove, (err, result, fields) => {
-		if (err) {
-			res.json({
-				status: 'Error',
-				message: 'Error when trying to delete a move. Please try again.',
-			});
-		} else {
-			res.json({
-				status: 'Success',
-				message: 'Move deleted successfully.',
-			});
+	connection.query(
+		sqlDeleteMoveUser,
+		valuesDeleteMoveUser,
+		(err, result, fields) => {
+			if (err) {
+				res.json({
+					status: 'Error',
+					message: 'Error when trying to delete a move. Please try again.',
+				});
+			} else {
+				const sqlDeleteMove = `
+					DELETE FROM Moves
+					WHERE move_id = ?
+				`;
+
+				const valuesDeleteMove = [req.params.moveId];
+
+				connection.query(
+					sqlDeleteMove,
+					valuesDeleteMove,
+					(err, result, fields) => {
+						if (err) {
+							res.json({
+								status: 'Error',
+								message:
+									'Error when trying to delete a move. Please try again.',
+							});
+						} else {
+							res.json({
+								status: 'Success',
+								message: 'Move deleted successfully.',
+							});
+						}
+					}
+				);
+			}
 		}
-	});
+	);
 });
 
 module.exports = router;
