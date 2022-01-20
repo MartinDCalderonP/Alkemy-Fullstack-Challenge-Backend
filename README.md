@@ -8,8 +8,6 @@ Connection to MySQL database, different routes for CRUD tasks, login and registe
 
 # Next things to add to the project
 
-Use TypeScript.
-
 Routes for categories, order and search.
 
 Use Sequelize.
