@@ -1,13 +1,12 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const dotenv = require('dotenv');
-const session = require('express-session');
-const FileStore = require('session-file-store')(session);
-const auth = require('./auth');
-const signInRoutes = require('./routes/signIn_routes');
-const signUpRoutes = require('./routes/signUp_routes');
-const movesRoutes = require('./routes/moves_routes');
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+import session from 'express-session';
+import FileStore from 'session-file-store';
+import signInRoutes from './routes/signIn_routes';
+import signUpRoutes from './routes/signUp_routes';
+import movesRoutes from './routes/moves_routes';
 
 const app = express();
 
@@ -24,9 +23,11 @@ app.use(
 	})
 );
 
+const sessionFileStore = FileStore(session);
+
 app.use(
 	session({
-		store: new FileStore({ logFn: function () {} }),
+		store: new sessionFileStore(),
 		secret: '123456789',
 		resave: false,
 		saveUninitialized: true,
@@ -34,7 +35,7 @@ app.use(
 	})
 );
 
-app.use('/auth', signInRoutes);
+app.use('/sign-in', signInRoutes);
 app.use('/sign-up', signUpRoutes);
 app.use('/moves', movesRoutes);
 

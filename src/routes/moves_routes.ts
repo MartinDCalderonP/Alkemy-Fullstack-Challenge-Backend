@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import connection from '../connection';
+
 const router = express.Router();
-const connection = require('../connection');
 
 router.get('/by-user-id/:userId', (req, res) => {
 	const sqlGetMovesByUserId = `
@@ -200,4 +201,4 @@ router.delete('/:moveId', (req, res) => {
 	);
 });
 
-module.exports = router;
+export default router;

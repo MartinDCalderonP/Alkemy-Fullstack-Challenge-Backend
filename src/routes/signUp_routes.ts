@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import connection from '../connection';
+
 const router = express.Router();
-const connection = require('../connection');
 
 router.post('/users', (req, res) => {
 	const sqlCheckUser = `
@@ -76,8 +77,6 @@ router.post('/users', (req, res) => {
 										});
 									} else {
 										if (result.length > 0) {
-											req.session.user = result[0];
-
 											res.json({
 												status: 'Success',
 												message: 'User signed up successfully.',
@@ -101,4 +100,4 @@ router.post('/users', (req, res) => {
 	});
 });
 
-module.exports = router;
+export default router;
