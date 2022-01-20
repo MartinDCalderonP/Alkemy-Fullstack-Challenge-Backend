@@ -19,9 +19,14 @@ router.get('/by-user-id/:userId', (req, res) => {
 		sqlGetMovesByUserId,
 		valuesGetMovesByUserId,
 		(err, result, fields) => {
-			if (err) throw err;
-
-			res.json(result);
+			if (err) {
+				res.json({
+					status: 'Error',
+					message: err,
+				});
+			} else {
+				res.json(result);
+			}
 		}
 	);
 });
@@ -41,9 +46,14 @@ router.get('/by-move-id/:userId/:moveId', (req, res) => {
 	const valuesGetMoveById = [req.params.userId, req.params.moveId];
 
 	connection.query(sqlGetMoveById, valuesGetMoveById, (err, result, fields) => {
-		if (err) throw err;
-
-		res.json(result);
+		if (err) {
+			res.json({
+				status: 'Error',
+				message: err,
+			});
+		} else {
+			res.json(result);
+		}
 	});
 });
 
