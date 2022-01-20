@@ -4,12 +4,10 @@ This backend is for a transactions manager app made with Node and Express, which
 
 # Things that are working now
 
-Different routes for CRUD tasks, connection to MySQL database and login with session route.
+Use TypeScript.
 
 # Next things to add to the project
 
-Register routes.
-
-Routes for user personal transactions.
-
 Routes for categories, order and search.
+
+Use Sequelize.
