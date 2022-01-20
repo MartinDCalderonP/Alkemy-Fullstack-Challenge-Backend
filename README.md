@@ -4,9 +4,11 @@ This backend is for a transactions manager app made with Node and Express, which
 
 # Things that are working now
 
-Use TypeScript.
+Connection to MySQL database, different routes for CRUD tasks, login and register with his own routes.
 
 # Next things to add to the project
+
+Use TypeScript.
 
 Routes for categories, order and search.
 
