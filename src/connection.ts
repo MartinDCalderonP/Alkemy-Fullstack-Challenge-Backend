@@ -16,7 +16,7 @@ connection.getConnection((err) => {
 		return;
 	}
 
-	console.log('DB is connected');
+	console.log('Database is connected');
 });
 
 export default connection;
