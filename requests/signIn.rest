@@ -1,0 +1,8 @@
+POST http://localhost:8888/sign-in/users
+Content-Type: application/json
+Credentials: include
+
+{
+    "email": "martin@test.com",
+    "password": "test1234"
+}
