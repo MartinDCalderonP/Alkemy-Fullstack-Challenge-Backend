@@ -10,4 +10,6 @@ Connection to MySQL database, different routes for CRUD tasks, login and registe
 
 Routes for categories, order and search.
 
+Merge Sign In and Sign In after Sign Up.
+
 Use Sequelize.
