@@ -1,0 +1,4 @@
+GET http://localhost:8888/moves
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6Ik1hcnTDrW4iLCJlbWFpbCI6Im1hcnRpbkB0ZXN0LmNvbSIsImlhdCI6MTY0MzUxOTc3NiwiZXhwIjoxNjQzNTIzMzc2fQ.fZyXt8efhjVPKCKBwYnV6zFJW2WqQWv7iNZ5oU6tUCc
