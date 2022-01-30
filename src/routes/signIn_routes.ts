@@ -1,5 +1,9 @@
 import express from 'express';
 import connection from '../connection';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const router = express.Router();
 
@@ -15,24 +19,35 @@ router.post('/users', (req, res) => {
 
 	connection.query(sqlSignInUser, valuesSignInUser, (err, result) => {
 		if (err) {
-			res.json({
+			return res.json({
 				status: 'Error',
 				message: 'Error when trying to sign in. Please try again.',
 			});
-		} else {
-			if (result.length > 0) {
-				res.json({
-					status: 'Success',
-					message: 'Sign in successful.',
-					user: result[0],
-				});
-			} else {
-				res.json({
-					status: 'Error',
-					message: 'Invalid email or password.',
-				});
-			}
 		}
+
+		if (result.length > 0 && process.env.JWT_SECRET) {
+			const userForToken = {
+				id: result[0].user_id,
+				name: result[0].user_name,
+				email: result[0].user_email,
+			};
+
+			const token = jwt.sign(userForToken, process.env.JWT_SECRET, {
+				expiresIn: '1h',
+			});
+
+			return res.json({
+				status: 'Success',
+				message: 'Sign in successful.',
+				user: result[0],
+				token: token,
+			});
+		}
+		
+		return res.json({
+			status: 'Error',
+			message: 'Invalid email or password.',
+		});
 	});
 });
 
