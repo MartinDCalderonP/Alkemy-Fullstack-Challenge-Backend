@@ -1,9 +1,10 @@
 import express from 'express';
 import connection from '../connection';
+import userAuth from '../middlewares/userAuth';
 
 const router = express.Router();
 
-router.get('/by-user-id/:userId', (req, res) => {
+router.get('/', userAuth, (req, res) => {
 	const sqlGetMovesByUserId = `
 		SELECT *
 		FROM Moves
@@ -14,25 +15,25 @@ router.get('/by-user-id/:userId', (req, res) => {
 		WHERE users.user_id = ?;
     `;
 
-	const valuesGetMovesByUserId = [req.params.userId];
+	const valuesGetMovesByUserId = [req.body.userId];
 
 	connection.query(
 		sqlGetMovesByUserId,
 		valuesGetMovesByUserId,
-		(err, result, fields) => {
+		(err, result) => {
 			if (err) {
-				res.json({
+				return res.json({
 					status: 'Error',
 					message: err,
 				});
-			} else {
-				res.json(result);
 			}
+
+			res.json(result);
 		}
 	);
 });
 
-router.get('/by-move-id/:userId/:moveId', (req, res) => {
+router.get('/move-id/:moveId', userAuth, (req, res) => {
 	const sqlGetMoveById = `
 		SELECT *
 		FROM Moves
@@ -44,23 +45,23 @@ router.get('/by-move-id/:userId/:moveId', (req, res) => {
 		AND moves.move_id = ?;
 	`;
 
-	const valuesGetMoveById = [req.params.userId, req.params.moveId];
+	const valuesGetMoveById = [req.body.userId, req.params.moveId];
 
-	connection.query(sqlGetMoveById, valuesGetMoveById, (err, result, fields) => {
+	connection.query(sqlGetMoveById, valuesGetMoveById, (err, result) => {
 		if (err) {
-			res.json({
+			return res.json({
 				status: 'Error',
 				message: err,
 			});
-		} else {
-			res.json(result);
 		}
+
+		res.json(result);
 	});
 });
 
-router.post('/', (req, res) => {
+router.post('/', userAuth, (req, res) => {
 	const sqlPostMove = `
-        INSERT INTO Moves (
+		INSERT INTO Moves (
 			move_description,
 			move_amount,
 			move_type,
@@ -71,7 +72,7 @@ router.post('/', (req, res) => {
 			?,
 			?
 		)
-    `;
+	`;
 
 	const valuesPostMove = [
 		req.body.description,
@@ -80,48 +81,43 @@ router.post('/', (req, res) => {
 		req.body.date,
 	];
 
-	connection.query(sqlPostMove, valuesPostMove, (err, result, fields) => {
+	connection.query(sqlPostMove, valuesPostMove, (err, result) => {
 		if (err) {
-			res.json({
+			return res.json({
 				status: 'Error',
 				message: 'Error when trying to create a new move. Please try again.',
 			});
-		} else {
-			const sqlPostMoveUser = `
-				INSERT INTO moves_users (
-					mous_move_id,
-					mous_user_id
-				) VALUES (
-					?,
-					?
-				)
-			`;
-
-			const valuesPostMoveUser = [result.insertId, req.body.userId];
-
-			connection.query(
-				sqlPostMoveUser,
-				valuesPostMoveUser,
-				(err, result, fields) => {
-					if (err) {
-						res.json({
-							status: 'Error',
-							message:
-								'Error when trying to create a new move. Please try again.',
-						});
-					} else {
-						res.json({
-							status: 'Success',
-							message: 'Move created successfully.',
-						});
-					}
-				}
-			);
 		}
+
+		const sqlPostMoveUser = `
+			INSERT INTO moves_users (
+				mous_move_id,
+				mous_user_id
+			) VALUES (
+				?,
+				?
+			)
+		`;
+
+		const valuesPostMoveUser = [result.insertId, req.body.userId];
+
+		connection.query(sqlPostMoveUser, valuesPostMoveUser, (err) => {
+			if (err) {
+				return res.json({
+					status: 'Error',
+					message: 'Error when trying to create a new move. Please try again.',
+				});
+			}
+
+			res.json({
+				status: 'Success',
+				message: 'Move created successfully.',
+			});
+		});
 	});
 });
 
-router.put('/:moveId', (req, res) => {
+router.put('/:moveId', userAuth, (req, res) => {
 	const sqlUpdateMove = `
 		UPDATE Moves
 		SET move_description = ?,
@@ -137,68 +133,59 @@ router.put('/:moveId', (req, res) => {
 		req.params.moveId,
 	];
 
-	connection.query(sqlUpdateMove, valuesUpdateMove, (err, result, fields) => {
+	connection.query(sqlUpdateMove, valuesUpdateMove, (err) => {
 		if (err) {
-			res.json({
+			return res.json({
 				status: 'Error',
 				message: 'Error when trying to update a move. Please try again.',
 			});
-		} else {
-			res.json({
-				status: 'Success',
-				message: 'Move updated successfully.',
-			});
 		}
+
+		res.json({
+			status: 'Success',
+			message: 'Move updated successfully.',
+		});
 	});
 });
 
-router.delete('/:moveId', (req, res) => {
+router.delete('/:moveId', userAuth, (req, res) => {
 	const sqlDeleteMoveUser = `
-				DELETE FROM moves_users
-				WHERE mous_move_id = ?
-				AND mous_user_id = ?
-			`;
+		DELETE FROM moves_users
+		WHERE mous_move_id = ?
+		AND mous_user_id = ?
+	`;
 
 	const valuesDeleteMoveUser = [req.params.moveId, req.body.userId];
 
-	connection.query(
-		sqlDeleteMoveUser,
-		valuesDeleteMoveUser,
-		(err, result, fields) => {
+	connection.query(sqlDeleteMoveUser, valuesDeleteMoveUser, (err) => {
+		if (err) {
+			return res.json({
+				status: 'Error',
+				message: 'Error when trying to delete a move. Please try again.',
+			});
+		}
+
+		const sqlDeleteMove = `
+			DELETE FROM Moves
+			WHERE move_id = ?
+		`;
+
+		const valuesDeleteMove = [req.params.moveId];
+
+		connection.query(sqlDeleteMove, valuesDeleteMove, (err) => {
 			if (err) {
-				res.json({
+				return res.json({
 					status: 'Error',
 					message: 'Error when trying to delete a move. Please try again.',
 				});
-			} else {
-				const sqlDeleteMove = `
-					DELETE FROM Moves
-					WHERE move_id = ?
-				`;
-
-				const valuesDeleteMove = [req.params.moveId];
-
-				connection.query(
-					sqlDeleteMove,
-					valuesDeleteMove,
-					(err, result, fields) => {
-						if (err) {
-							res.json({
-								status: 'Error',
-								message:
-									'Error when trying to delete a move. Please try again.',
-							});
-						} else {
-							res.json({
-								status: 'Success',
-								message: 'Move deleted successfully.',
-							});
-						}
-					}
-				);
 			}
-		}
-	);
+
+			res.json({
+				status: 'Success',
+				message: 'Move deleted successfully.',
+			});
+		});
+	});
 });
 
 export default router;
