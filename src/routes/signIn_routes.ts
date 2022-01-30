@@ -43,7 +43,7 @@ router.post('/users', (req, res) => {
 				token: token,
 			});
 		}
-		
+
 		return res.json({
 			status: 'Error',
 			message: 'Invalid email or password.',
@@ -62,17 +62,18 @@ router.delete(
 	) => {
 		req.session.destroy((err) => {
 			if (err) {
-				res.json({
+				return res.json({
 					status: 'Error',
 					message: 'Error trying to sign out. Try again later.',
 				});
-			} else {
-				res.clearCookie('Alkemy Fullstack Challenge');
-				res.json({
-					status: 'Success',
-					message: 'User signed out successfully.',
-				});
 			}
+
+			res.clearCookie('Alkemy Fullstack Challenge');
+
+			return res.json({
+				status: 'Success',
+				message: 'User signed out successfully.',
+			});
 		});
 	}
 );
