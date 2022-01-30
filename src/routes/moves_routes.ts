@@ -33,7 +33,7 @@ router.get('/', userAuth, (req, res) => {
 	);
 });
 
-router.get('/move-id/:moveId', userAuth, (req, res) => {
+router.get('/:moveId', userAuth, (req, res) => {
 	const sqlGetMoveById = `
 		SELECT *
 		FROM Moves
