@@ -52,12 +52,12 @@ router.post('/users', (req, res) => {
 });
 
 router.delete(
-	'/',
+	'/users',
 	(
 		req: { session: { destroy: (response: (err: Error) => void) => void } },
 		res: {
-			json: (response: { status: string; message: string }) => void;
 			clearCookie: (cookie: string) => void;
+			json: (response: { status: string; message: string }) => void;
 		}
 	) => {
 		req.session.destroy((err) => {
