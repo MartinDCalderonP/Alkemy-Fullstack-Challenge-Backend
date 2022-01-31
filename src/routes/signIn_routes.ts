@@ -39,8 +39,10 @@ router.post('/users', (req, res) => {
 			return res.json({
 				status: 'Success',
 				message: 'Sign in successful.',
-				user: result[0],
-				token: token,
+				user: {
+					...result[0],
+					user_token: token,
+				},
 			});
 		}
 
