@@ -31,5 +31,5 @@
   "devDependencies": {
     "ts-node-dev": "^1.1.8"
   },
-  "packageManager": "pnpm@11.3.0"
+  "packageManager": "pnpm@12.14.0"
 }
